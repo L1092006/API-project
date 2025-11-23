@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .serializers import *
 from .models import *
+from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 
@@ -67,3 +68,32 @@ class SingleMenuItem(APIView):
             return Response({'message: item deleted'}, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'unauthorized'}, status.HTTP_403_FORBIDDEN)
+        
+
+class Managers(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, pk):
+        if request.user.groups.filter(name='Manager').exists():
+            managers = User.objects.filter(group__name='Manager')
+            serialized = ManagerSerializer(managers, many=True)
+            return Response(serialized.data, status=status.HTTP_200_OK)
+        return Response({'error': 'unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+
+    
+    def post(self, request, pk):
+        if request.user.groups.filter(name='Manager').exists():
+            serialized = MenuItemSerializer(data=request.data)
+            serialized.is_valid(raise_exception=True)
+            serialized.save()
+            return Response(serialized.validated_data, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'error': 'unauthorized'}, status.HTTP_403_FORBIDDEN)
+
+    def put(self, request, pk):
+        return Response({'error': 'method not supported'}, status.HTTP_403_FORBIDDEN)
+    
+    def patch(self, request):
+        return Response({'error': 'method not supported'}, status.HTTP_403_FORBIDDEN)
+    
+    def delete(self, request):
+        return Response({'error': 'method not supported'}, status.HTTP_403_FORBIDDEN)
