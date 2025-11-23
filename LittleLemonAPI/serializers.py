@@ -18,3 +18,15 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username']
+
+class CartSerializer(serializers.ModelSerializer):
+    menuitem = MenuItemSerializer()
+    class Meta:
+        model = Cart
+        fields = ['menuitem', 'quantity']
+
+# class CartPostSerializer(serializers.Serializer):
+#     menuitem_id = serializers.IntegerField(write_only=True)
+#     class Meta:
+#         model = Cart
+#         fields = ['menuitem_id', 'quantity']
