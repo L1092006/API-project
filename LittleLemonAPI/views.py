@@ -183,4 +183,21 @@ class CartMenuItemsView(APIView):
     
     def delete(self, request):
         Cart.objects.filter(user=request.user).delete()
-        return Response({'message: all of your carts deleted'}, status=status.HTTP_200_OK)
+        return Response({'message: all of your carts have been deleted'}, status=status.HTTP_200_OK)
+    
+
+
+
+
+class OrdersView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        if request.user.groups.filter(name='Manager').exists():
+            orders = Order.objects.all()
+        elif request.user.groups.filter(name='Delivery crew').exists():
+            orders = Order.objects.filter(delivery_crew=request.user)
+        else:
+            orders = Order.objects.filter(user=request.user)
+        serialized = OrderSerializer(orders, many=True)
+        return Response(serialized.data, status=status.HTTP_200_OK)

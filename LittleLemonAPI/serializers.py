@@ -25,8 +25,18 @@ class CartSerializer(serializers.ModelSerializer):
         model = Cart
         fields = ['menuitem', 'quantity']
 
-# class CartPostSerializer(serializers.Serializer):
-#     menuitem_id = serializers.IntegerField(write_only=True)
-#     class Meta:
-#         model = Cart
-#         fields = ['menuitem_id', 'quantity']
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    menuitem = serializers.StringRelatedField(read_only=True)
+    menuitem_id = serializers.IntegerField(write_only=True)
+    class Meta:
+        model = OrderItem
+        fields = ['menuitem', 'menuitem_id', 'quantity', 'unit_price', 'price']
+
+class OrderSerializer(serializers.ModelSerializer):
+    orderitem_set = OrderItemSerializer(many=True, read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
+    class Meta:
+        model = Order
+        fields = ['user', 'orderitem_set', 'delivery_crew', 'status', 'total', 'date']
