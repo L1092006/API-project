@@ -20,10 +20,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username']
 
 class CartSerializer(serializers.ModelSerializer):
-    menuitem = MenuItemSerializer()
+    menuitem = MenuItemSerializer(read_only=True)
+    price = serializers.DecimalField(max_digits=6, decimal_places=2, read_only=True)
     class Meta:
         model = Cart
-        fields = ['menuitem', 'quantity']
+        fields = ['menuitem', 'quantity', 'price']
 
 
 
@@ -37,6 +38,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     orderitem_set = OrderItemSerializer(many=True, read_only=True)
     user = serializers.StringRelatedField(read_only=True)
+    delivery_crew_id = serializers.IntegerField(write_only=True)
+    delivery_crew = serializers.StringRelatedField()
     class Meta:
         model = Order
-        fields = ['user', 'orderitem_set', 'delivery_crew', 'status', 'total', 'date']
+        fields = ['user', 'orderitem_set', 'delivery_crew', 'delivery_crew_id', 'status', 'total', 'date']

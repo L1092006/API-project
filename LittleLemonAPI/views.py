@@ -201,3 +201,86 @@ class OrdersView(APIView):
             orders = Order.objects.filter(user=request.user)
         serialized = OrderSerializer(orders, many=True)
         return Response(serialized.data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        if not (request.user.groups.filter(name='Manager').exists() or request.user.groups.filter(name='Manager').exists()):
+            cartItems = Cart.objects.select_related('menuitem').filter(user=request.user)
+            
+            totalPrice = 0
+            for c in cartItems:
+                totalPrice += c.price
+            
+            order = Order(user=request.user, total=totalPrice)
+            order.save()
+
+            for c in cartItems:
+                orderItem = OrderItem(order=order, menuitem=c.menuitem, quantity=c.quantity, unit_price=c.unit_price, price=c.price)
+                orderItem.save()
+
+            cartItems.delete()
+
+            return Response({'message: order created'}, status=status.HTTP_201_CREATED)
+        return Response({'error: Unauthorized'})
+    
+class SingleOrderView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        if not (request.user.groups.filter(name='Manager').exists() or request.user.groups.filter(name='Manager').exists()):
+            order = get_object_or_404(Order, id=pk)
+            if order.user != request.user:
+                return Response({'error': "You don't have this order"}, status=status.HTTP_401_UNAUTHORIZED)
+
+            orderItems = OrderItem.objects.filter(order=order)
+
+            items = [item.menuitem for item in orderItems]
+            return Response(MenuItemSerializer(items, many=True).data, status=status.HTTP_200_OK)
+        return Response({'error: Unauthorized'})
+    
+    #Improvement for  put and patch: only allow manager to update the delivery crew and allow customer to update the menuitem
+    def put(self, request, pk):
+        if not request.user.groups.filter(name='Delivery crew').exists():
+            order = get_object_or_404(Order, id=pk)
+            if order.user != request.user and not request.user.groups.filter(name='Manager').exists():
+                return Response({'error': "You don't have this order"}, status=status.HTTP_401_UNAUTHORIZED)
+
+            serialized = OrderSerializer(order, data=request.data, partial=True)
+            serialized.is_valid(raise_exception=True)
+            serialized.save()
+            
+            return Response(serialized.data, status=status.HTTP_200_OK)
+        return Response({'error: Unauthorized'})
+
+    def patch(self, request, pk):
+        if not request.user.groups.filter(name='Delivery crew').exists():
+            order = get_object_or_404(Order, id=pk)
+            if order.user != request.user and not request.user.groups.filter(name='Manager').exists():
+                return Response({'error': "You don't have this order"}, status=status.HTTP_401_UNAUTHORIZED)
+
+            serialized = OrderSerializer(order, data=request.data, partial=True)
+            serialized.is_valid(raise_exception=True)
+            serialized.save()
+            
+            return Response(serialized.data, status=status.HTTP_200_OK)
+        else:
+            order = get_object_or_404(Order, id=pk)
+            if order.delivery_crew != request.user:
+                return Response({'error': "You don't have this order"}, status=status.HTTP_401_UNAUTHORIZED)
+
+            if not request.data.get('status'):
+                return Response({'error': 'Please provide the status'})
+            delivered = {'status': request.data.get('status')}
+            serialized = OrderSerializer(order, data=delivered, partial=True)
+            serialized.is_valid(raise_exception=True)
+            serialized.save()
+            return Response(serialized.data, status=status.HTTP_200_OK)
+        
+    def delete(self, request, pk):
+        if request.user.groups.filter(name='Manager').exists():
+            order = get_object_or_404(Order, id=pk)
+            order.delete()
+            return Response({'message': 'order deleted'}, status=status.HTTP_200_OK)
+        return Response({'error': 'unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+
+        
+    
