@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="{% static 'LittleLemonUI/css/styles.css' %}">
     <title>Lucky Shrub</title>
 </head>
 <body>
     <header>
-        <img src="logo.png" alt="Logo of Lucky Shrub">
+        <img src="{% static 'LittleLemonUI/img/logo.png' %}" alt="Logo of Lucky Shrub">
     </header>
     <nav>
         <ul>
-            <li><a href="index.html">Home</a></li>
+            <li><a href="">Home</a></li>
             <li><a href="services.html">Services</a></li>
             <li><a href="contact.html">Contact</a></li>
             <li><a href="about.html">About</a></li>
@@ -21,32 +22,32 @@
     <main>
         <article id="offer">
             <h1>Newest Offer</h1>
-            <img src="services.png" alt="offer image">
+            <img src="{% static 'LittleLemonUI/img/services.png' %}" alt="offer image">
             <p>Grand opening sale! Get 20% off all items.</p>
         </article>
 
         <article class="service">
             <h2>Design and Creation</h2>
-            <img src="services.png" alt="services image">
+            <img src="{% static 'LittleLemonUI/img/services.png' %}" alt="services image">
             <p>Our team of experts can design and create beautiful landscapes tailored to your needs.</p>
         </article>
 
         <article class="service">
             <h2>Maintenance</h2>
-            <img src="services.png" alt="services image">
+            <img src="{% static 'LittleLemonUI/img/services.png' %}" alt="services image">
             <p>Maintenance services to keep your garden looking its best.</p>
         </article>
 
         <article class="service">
             <h2>Landscaping</h2>
-            <img src="services.png" alt="services image">
+            <img src="{% static 'LittleLemonUI/img/services.png' %}" alt="services image">
             <p>Professional landscaping services to transform your outdoor space.</p>
         </article>
     </main>
 
     <footer>
         <div>
-            <img src="logo.png" alt="image of logo">
+            <img src="{% static 'LittleLemonUI/img/logo.png' %}" alt="image of logo">
         </div>
 
         <div>
