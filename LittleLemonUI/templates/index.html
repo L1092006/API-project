@@ -1,25 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 {% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'LittleLemonUI/css/styles.css' %}">
-    <title>Lucky Shrub</title>
-</head>
-<body>
-    <header>
-        <a href=""><img src="{% static 'LittleLemonUI/img/logo.png' %}" alt="Logo of Lucky Shrub"></a>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="">Home</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="about.html">About</a></li>
-        </ul>
-    </nav>
-    <main>
+
+
+{% block content %}
+<div id="home">
         <article id="offer">
             <h1>Newest Offer</h1>
             <img src="{% static 'LittleLemonUI/img/services.png' %}" alt="offer image">
@@ -43,16 +27,6 @@
             <img src="{% static 'LittleLemonUI/img/services.png' %}" alt="services image">
             <p>Professional landscaping services to transform your outdoor space.</p>
         </article>
-    </main>
+    </div>
+{% endblock %}
 
-    <footer>
-        <div>
-            <img src="{% static 'LittleLemonUI/img/logo.png' %}" alt="image of logo">
-        </div>
-
-        <div>
-            <p>© 2025 Lucky Shrub. All rights reserved.</p>
-        </div>
-    </footer>
-</body>
-</html>

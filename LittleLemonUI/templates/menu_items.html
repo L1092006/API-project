@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    <title>Menu Items</title>
+{% endblock %}
+
+{% block content %}
+    <div id="menu_items">
+        <ul>
+        </ul>
+    </div>
+
+    <script>
+        fetch('/api/menu-items/')
+        .then(response => response.json())
+        .then(data => {
+            let menuItemsDiv = document.getElementById('menu_items').querySelector('ul');
+            data.forEach(item => {
+                let listItem = document.createElement('li');
+                listItem.textContent = `${item.title} - $${item.price}`;
+                menuItemsDiv.appendChild(listItem);
+                console.log(item);
+            });
+        });
+    </script>
+    
+{% endblock %}

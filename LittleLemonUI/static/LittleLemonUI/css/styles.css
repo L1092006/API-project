@@ -1,8 +1,9 @@
+/* Base rules */
 body {
     background-color: rgb(201, 236, 201);
     font-family: 'Arial', serif;
-    color: rgb(167, 63, 63);
     margin: 3rem 5% 3rem 5%;
+    color: #4e8d71;
 }
 
 h1 {
@@ -18,9 +19,16 @@ img {
     height: auto;
 }
 
+header {
+    display: flex;
+}
 
-header img {
-    display: block;
+header .logo {
+    flex: 1;
+}
+header .profile {
+    flex: 1;
+    text-align: right;
 }
 
 nav {
@@ -30,7 +38,7 @@ nav {
     background-color: rgb(152, 206, 173);
     height: 3rem;
     margin-top: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 nav a {
@@ -53,35 +61,7 @@ nav ul {
     text-align: center;
     margin-top: 0.5rem;
 }
-
-main {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    justify-content: center;
-    gap: 2rem;
-}
-
-main article:hover {
-    transform: scale(1.05);
-}
-
-main #offer {
-    grid-column: 1 / span 3;
-    text-align: center;
-    border-radius: 5%;
-    background-color: rgb(152, 206, 173);
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-main .service {
-    text-align: center;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 5%;
-    background-color: rgb(152, 206, 173);
-}   
+ 
 
 
 footer {
@@ -102,3 +82,40 @@ footer img {
     width: 5rem;
     height: auto;
 }
+
+/* Home page rules */
+
+#home {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    justify-content: center;
+    gap: 2rem;
+    color: rgb(167, 63, 63);
+}
+
+#home article:hover {
+    transform: scale(1.05);
+}
+
+#home #offer {
+    grid-column: 1 / span 3;
+    text-align: center;
+    border-radius: 5%;
+    background-color: rgb(152, 206, 173);
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 1.5em;
+}
+
+#home .service {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5%;
+    background-color: rgb(152, 206, 173);
+}  
+
+
+/* Login page rules */
+

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'LittleLemonUI/css/styles.css' %}">
+    {% block title %}
+    <title>Lucky Shrub</title>
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/"><img src="{% static 'LittleLemonUI/img/logo.png' %}" alt="Logo of Lucky Shrub"></a>
+        </div>
+        
+        {% block profile %}
+        <div class="profile">
+            <script>
+                function getCookie(name) {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        const cookies = document.cookie.split(';');
+                        for (let i = 0; i < cookies.length; i++) {
+                            const cookie = cookies[i].trim();
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+                fetch('/auth/users/me/')
+                .then(response => response.json())
+                .then(data => {
+                    let profile = document.querySelector('.profile');
+                    if (data.username) {
+                        let welcomeMes = document.createElement('p');
+                        welcomeMes.textContent = `Welcome, ${data.username}!`;
+                        profile.appendChild(welcomeMes);
+                        let logoutButton = document.createElement('button');
+                        logoutButton.textContent = 'Logout';
+                        logoutButton.onclick = function() {
+                            fetch('/logout/', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRFToken': getCookie('csrftoken')
+                                }
+                            });
+                            location.reload();
+                        };
+                        profile.appendChild(logoutButton);
+                    } else {
+                        let loginLink = document.createElement('a');
+                        loginLink.href = '/login/';
+                        loginLink.textContent = 'Login';
+                        profile.appendChild(loginLink);
+                    }
+                });
+            </script>
+        </div>
+        {% endblock %}
+    </header>
+
+    {% block nav %}
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/items">Items</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+    {% endblock %}
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div>
+            <img src="{% static 'LittleLemonUI/img/logo.png' %}" alt="image of logo">
+        </div>
+
+        <div>
+            <p>© 2025 Lucky Shrub. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
