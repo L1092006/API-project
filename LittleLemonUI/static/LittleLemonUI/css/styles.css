@@ -18,9 +18,9 @@ img {
     height: auto;
 }
 
-header > img {
+
+header img {
     display: block;
-    margin: auto;
 }
 
 nav {
